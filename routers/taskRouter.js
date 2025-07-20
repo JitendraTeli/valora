@@ -5,11 +5,11 @@ import { makeTask,deleteTask,updateStatus,taskList,myTasks} from '../controllers
 
 const router = Router();
 
-router.get("/tasks",taskList);
-router.post("/task",makeTask);
+router.get("/tasks/user",protect,myTasks);
+router.get("/tasks",protect,authorize("admin"),taskList);
+router.post("/task",protect,authorize("admin"),makeTask);
 router.put("/status",updateStatus);
-router.delete("/task/:id",deleteTask);
-router.get("/tasks/:id",myTasks);
+router.delete("/task/:id",protect,authorize("admin"),deleteTask);
 
 
 export default router

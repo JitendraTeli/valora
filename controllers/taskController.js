@@ -66,17 +66,15 @@ export const updateStatus = async (req,res) => {
     const {id,status} = req.body;
     
     if(!id || !status) {
-        res.status(200).json({message : "missing parameters"})
+       return  res.status(200).json({message : "missing parameters"})
     }
 
     try {
-        const task = await TaskModel.findById(id);
-        task.status = status;
+        await TaskModel.findOneAndUpdate(id,{$set : {status : status}});
 
-        await task.save();
     } catch(err) {
         console.log(err);
-        res.status(500).json({message : "internal server error"});
+        return res.status(500).json({message : "internal server error"});
     }
 }
 
@@ -88,11 +86,11 @@ export const myTasks = async (req,res) => {
         const tasks =await TaskModel.find({to:id}).lean();
 
         console.log(tasks);
-        res.status(200).json({tasks : tasks});
+        return res.status(200).json({tasks : tasks});
 
     } catch(err) {
         console.log(err);
-        res.status(500).json({message : "internal server error"});
+        return res.status(500).json({message : "internal server error"});
     }
 }
 
